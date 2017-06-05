@@ -40,8 +40,8 @@ public class ListaEstacionamentos extends AppCompatActivity implements ListView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Mapa.localEscolhido = adapter.getItem(position);
-        Intent i = new Intent(this, Mapa.class);
-        startActivity(i);
+        //Mapa.localEscolhido = adapter.getItem(position);
+        //Intent i = new Intent(this, Mapa.class);
+        //startActivity(i);
     }
 }
