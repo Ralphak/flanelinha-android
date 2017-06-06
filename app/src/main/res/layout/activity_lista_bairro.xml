@@ -34,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:dividerHeight="2dp"
+            android:headerDividersEnabled="false"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="129dp" />
     </LinearLayout>
