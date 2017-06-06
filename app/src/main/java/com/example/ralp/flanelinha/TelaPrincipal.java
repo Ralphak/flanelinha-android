@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,11 +13,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    View header;
+    static TextView headerNome, headerEmail;
+    static private boolean usuarioLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,10 @@ public class TelaPrincipal extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        header = navigationView.getHeaderView(0);
+        headerNome = (TextView) header.findViewById(R.id.headerNome);
+        headerEmail = (TextView) header.findViewById(R.id.headerEmail);
     }
 
     @Override
@@ -56,28 +64,6 @@ public class TelaPrincipal extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.tela_principal, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -86,16 +72,30 @@ public class TelaPrincipal extends AppCompatActivity
         Intent i = null;
 
         if(id == R.id.nav_cadastrar){
-            i = new Intent(this, Cadastro.class);
+            if(usuarioLogado)
+                Toast.makeText(this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
+            else
+                i = new Intent(this, Cadastro.class);
         }
         else if(id == R.id.nav_login){
-            i = new Intent(this, Login.class);
+            if(usuarioLogado)
+                Toast.makeText(this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
+            else
+                i = new Intent(this, Login.class);
+
+        }else if(id == R.id.nav_sair){
+            if(!usuarioLogado)
+                Toast.makeText(this, "Nenhum login detectado!", Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show();
+                atualizarLogin();
+            }
         }
         else if(id == R.id.nav_debugListar){
-
+            i = new Intent(this, DebugListaUsuarios.class);
         }
-        else if(id == R.id.nav_sair){
-
+        else if(id == R.id.nav_debugMapa){
+            i = new Intent(this, Mapa.class);
         }
 
         if(i != null)
@@ -104,5 +104,18 @@ public class TelaPrincipal extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //Atualiza informações para o usuário logado
+    static void atualizarLogin(String nome, String email){
+        headerNome.setText(nome);
+        headerEmail.setText(email);
+        usuarioLogado = true;
+    }
+    //Desconecta o usuário e volta para o visitante
+    static void atualizarLogin(){
+        headerNome.setText("Visitante");
+        headerEmail.setText("");
+        usuarioLogado = false;
     }
 }

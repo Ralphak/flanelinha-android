@@ -7,9 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static com.example.ralp.flanelinha.TelaPrincipal.atualizarLogin;
+
 public class Login extends AppCompatActivity implements Button.OnClickListener{
 
-    EditText email, senha;
+    EditText emailEdit, senhaEdit;
     Button entrar;
     UsuarioDB db = new UsuarioDB(this);
 
@@ -18,8 +20,8 @@ public class Login extends AppCompatActivity implements Button.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = (EditText) findViewById(R.id.campoEmail);
-        senha = (EditText) findViewById(R.id.campoSenha);
+        emailEdit = (EditText) findViewById(R.id.campoEmail);
+        senhaEdit = (EditText) findViewById(R.id.campoSenha);
         entrar = (Button) findViewById(R.id.botaoEnviar);
 
         entrar.setOnClickListener(this);
@@ -27,14 +29,25 @@ public class Login extends AppCompatActivity implements Button.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        Usuario usuario = db.get(email.getText().toString());
-        if(usuario == null || senha.getText().toString() != usuario.getSenha()){
-            Toast.makeText(this, "Email ou senha inválidos", Toast.LENGTH_SHORT).show();
+        String
+                email = emailEdit.getText().toString(),
+                senha = senhaEdit.getText().toString();
+
+        if(email.matches("") || senha.matches("")) {
+            Toast.makeText(this, "Todos os campos são obrigatórios!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        else {
+
+        Usuario usuario = db.get(email);
+        if(senha.matches(usuario.getSenha())){
             String primeiroNome = usuario.getNome().substring(0, usuario.getNome().indexOf(" "));
             Toast.makeText(this, "Bem vindo, " + primeiroNome + "!", Toast.LENGTH_SHORT).show();
+
+            atualizarLogin(usuario.getNome(), email);
+
             finish();
         }
+        else
+            Toast.makeText(this, "Email ou senha inválida!", Toast.LENGTH_SHORT).show();
     }
 }

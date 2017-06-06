@@ -54,7 +54,7 @@ public class UsuarioDB extends SQLiteOpenHelper {
      */
 
     // Adding new contact
-    void add(Usuario usuario) {
+    public void add(Usuario usuario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -68,18 +68,22 @@ public class UsuarioDB extends SQLiteOpenHelper {
     }
 
     // Getting single contact
-    Usuario get(String _email) {
+    public Usuario get(String _email) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE, new String[] {KEY_EMAIL,
                         KEY_NAME, KEY_PWD}, KEY_EMAIL + "=?",
                 new String[] { _email }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
+
+        if (cursor == null)
+            return null;
+
+        cursor.moveToFirst();
 
         Usuario usuario = new Usuario(cursor.getString(0),
                 cursor.getString(1), cursor.getString(2));
-        // return contact
+
+        db.close();
         return usuario;
     }
 
@@ -95,25 +99,30 @@ public class UsuarioDB extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
+                //Este objeto Usuario NÃO carrega as senhas!
                 Usuario usuario = new Usuario(cursor.getString(0), cursor.getString(1));
                 lista.add(usuario);
             } while (cursor.moveToNext());
         }
+
+        db.close();
 
         // return contact list
         return lista;
     }
 
     // Updating single contact
-    public int updatePassword(Usuario usuario) {
+    public void updatePassword(Usuario usuario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_PWD, usuario.getSenha());
 
         // updating row
-        return db.update(TABLE, values, KEY_EMAIL + " = ?",
+        db.update(TABLE, values, KEY_EMAIL + " = ?",
                 new String[] { usuario.getEmail() });
+
+        db.close();
     }
 
     // Deleting single contact

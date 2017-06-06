@@ -3,7 +3,6 @@
 package com.example.ralp.flanelinha;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -13,9 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,9 +29,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationListener;
 
 public class Mapa extends FragmentActivity implements OnMapReadyCallback,
-    GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener,
-    LocationListener{
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener{
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -116,7 +112,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
 
         //stop location updates
         if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
 
@@ -129,7 +125,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
 
@@ -204,4 +200,5 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
             //You can add here other case statements according to your requirement.
         }
     }
+
 }

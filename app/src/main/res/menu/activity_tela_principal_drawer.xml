@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_cadastrar"
-            android:title="Cadastrar" />
+            android:title="Cadastrar"
+            tools:ignore="HardcodedText" />
         <item
             android:id="@+id/nav_login"
-            android:title="Login" />
+            android:title="Login"
+            tools:ignore="HardcodedText" />
         <item
             android:id="@+id/nav_alterarSenha"
-            android:title="Alterar senha" />
-        <item
-            android:id="@+id/nav_debugListar"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="(Debug) Listar Usuários" />
+            android:title="Alterar senha"
+            tools:ignore="HardcodedText" />
+
         <item
             android:id="@+id/nav_sair"
-            android:title="Sair da conta" />
+            android:title="Sair da conta"
+            tools:ignore="HardcodedText" />
     </group>
+
+    <item
+        android:icon="@drawable/ic_menu_manage"
+        android:title="(Diagnóstico)">
+        <menu>
+            <item
+                android:id="@+id/nav_debugListar"
+                android:title="Listar Usuários"
+                tools:ignore="HardcodedText" />
+            <item
+                android:id="@+id/nav_debugMapa"
+                android:title="Mostrar apenas o mapa"
+                tools:ignore="HardcodedText" />
+        </menu>
+    </item>
 
 </menu>

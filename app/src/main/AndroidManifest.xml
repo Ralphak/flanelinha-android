@@ -40,10 +40,12 @@
         <activity android:name=".Mapa" />
         <activity
             android:name=".TelaPrincipal"
-            android:label="@string/title_activity_tela_principal"
+            android:label="Flanelinha"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".Cadastro" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
+        <activity android:name=".DebugListaUsuarios" />
+        <activity android:name=".DebugListaUsuariosAdapter"></activity>
     </application>
 
 </manifest>
