@@ -5,120 +5,123 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDB extends SQLiteOpenHelper{
+public class UsuarioDB extends SQLiteOpenHelper {
 
-    private static final String TAG = "sql";
-    public static final  String NOME_BANCO = "lista_usuarios.sqlite";
-    private static final int VERSAO_BANCO = 1;
+    // All Static variables
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+
+    // Database Name
+    private static final String DATABASE_NAME = "listaUsuarios";
+
+    // Table name
+    private static final String TABLE = "usuarios";
+
+    // Table Columns names
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_NAME = "nome";
+    private static final String KEY_PWD = "senha";
 
     public UsuarioDB(Context context) {
-
-        super(context, NOME_BANCO, null, VERSAO_BANCO);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG, "Criando tabela usuario..");
-        db.execSQL("create table if not exists usuario (email text primary key, nome text, senha text)");
-        Log.d(TAG, "Tabela criada com sucesso");
+        String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
+                + KEY_EMAIL + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT,"
+                + KEY_PWD + " TEXT" + ")";
+        db.execSQL(CREATE_TABLE);
     }
+
+    // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //Caso exista uma nova versÃ£o do BD
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE);
+
+        // Create tables again
+        onCreate(db);
     }
 
-    public void save(Usuario usuario){
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
+    /**
+     * All CRUD(Create, Read, Update, Delete) Operations
+     */
 
-            values.put("email", usuario.getEmail());
-            values.put("nome", usuario.getNome());
-            values.put("senha", usuario.getSenha());
+    // Adding new contact
+    void add(Usuario usuario) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
-            db.insert("usuario", "", values);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            db.close();
-        }
+        ContentValues values = new ContentValues();
+        values.put(KEY_EMAIL, usuario.getEmail());
+        values.put(KEY_NAME, usuario.getNome());
+        values.put(KEY_PWD, usuario.getSenha());
+
+        // Inserting Row
+        db.insert(TABLE, null, values);
+        db.close(); // Closing database connection
     }
 
-    public String update(Usuario usuario){
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put("email", usuario.getEmail());
-            values.put("nome", usuario.getNome());
-            values.put("senha", usuario.getSenha());
-            db.update("usuario", values, "email="+usuario.getEmail(),null);
-            //db.update("aluno", values, "matricula=?",new String[]{aluno.getMatricula()});
-        }
-        finally {
-            db.close();
-        }
-        return usuario.getEmail();
+    // Getting single contact
+    Usuario get(String _email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE, new String[] {KEY_EMAIL,
+                        KEY_NAME, KEY_PWD}, KEY_EMAIL + "=?",
+                new String[] { _email }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Usuario usuario = new Usuario(cursor.getString(0),
+                cursor.getString(1), cursor.getString(2));
+        // return contact
+        return usuario;
     }
 
-    public Usuario validarLogin(String _email, String _senha){
-        SQLiteDatabase db = getReadableDatabase();
-        Usuario usuario = new Usuario();
-        try{
-            Cursor c = db.rawQuery("select email from usuario where email = "+_email+" and senha = "+_senha+" ", null);
-            if (c.moveToFirst()){
-                String nome = c.getString(c.getColumnIndex("nome"));
-                String email = c.getString(c.getColumnIndex("email"));
-                usuario.setNome(nome);
-                usuario.setEmail(email);
-            }
-            return usuario;
+    // Getting All Contacts
+    public List<Usuario> getAll() {
+        List<Usuario> lista = new ArrayList<Usuario>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Usuario usuario = new Usuario(cursor.getString(0), cursor.getString(1));
+                lista.add(usuario);
+            } while (cursor.moveToNext());
         }
-        finally {
-            db.close();
-        }
+
+        // return contact list
+        return lista;
     }
 
-    /*
-    public ArrayList<Usuario> listarAlunos(){
-        SQLiteDatabase db = getReadableDatabase();
-        ArrayList<Aluno> alunos = null;
-        try {
-            //Cursor c = db.query("aluno", null, null, null, null, null, null);
-            //rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"});
-            Cursor c = db.rawQuery("select * from aluno", null);
-            if(c.moveToFirst()){
-                alunos = new ArrayList<Aluno>();
-                do {
-                    String matricula = c.getString(c.getColumnIndex("matricula"));
-                    String nome = c.getString(c.getColumnIndex("nome"));
-                    String email = c.getString(c.getColumnIndex("email"));
-                    Aluno aluno = new Aluno(matricula, nome, email);
-                    alunos.add(aluno);
+    // Updating single contact
+    public int updatePassword(Usuario usuario) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
-                }while(c.moveToNext());
-            }
-        }
-        finally {
-            db.close();
-        }
-        return alunos;
+        ContentValues values = new ContentValues();
+        values.put(KEY_PWD, usuario.getSenha());
+
+        // updating row
+        return db.update(TABLE, values, KEY_EMAIL + " = ?",
+                new String[] { usuario.getEmail() });
     }
 
-    public int delete(Aluno aluno){
-        SQLiteDatabase db = getWritableDatabase();
-        try{
-            int count = db.delete("aluno", "matricula="+aluno.getMatricula(), null);
-            return count;
-        }
-        finally {
-            db.close();
-        }
+    // Deleting single contact
+    public void delete(Usuario usuario) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE, KEY_EMAIL + " = ?",
+                new String[] { usuario.getEmail() });
+        db.close();
     }
-    */
+
 }
-

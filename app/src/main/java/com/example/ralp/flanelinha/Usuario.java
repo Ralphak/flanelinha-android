@@ -7,22 +7,13 @@ package com.example.ralp.flanelinha;
 public class Usuario {
 
     private String nome, email, senha;
-    public Usuario(String nome, String email, String senha){
-        this.nome = nome;
+    public Usuario(String email, String nome, String senha){
         this.email = email;
+        this.nome = nome;
         this.senha = senha;
     }
-    public Usuario(String nome, String email){
-        this.nome = nome;
+    public Usuario(String email, String nome){
         this.email = email;
-    }
-    public Usuario(){
-
-    }
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
         this.nome = nome;
     }
     public String getEmail() {
@@ -30,6 +21,12 @@ public class Usuario {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
     }
     public String getSenha() {
         return senha;

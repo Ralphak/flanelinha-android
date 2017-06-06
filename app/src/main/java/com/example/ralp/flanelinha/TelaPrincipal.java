@@ -83,24 +83,23 @@ public class TelaPrincipal extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Intent i;
+        Intent i = null;
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        } else if(id == R.id.nav_cadastrar){
+        if(id == R.id.nav_cadastrar){
             i = new Intent(this, Cadastro.class);
-            startActivity(i);
         }
+        else if(id == R.id.nav_login){
+            i = new Intent(this, Login.class);
+        }
+        else if(id == R.id.nav_debugListar){
+
+        }
+        else if(id == R.id.nav_sair){
+
+        }
+
+        if(i != null)
+            startActivity(i);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

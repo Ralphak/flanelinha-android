@@ -42,7 +42,8 @@
             android:name=".TelaPrincipal"
             android:label="@string/title_activity_tela_principal"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".Cadastro"></activity>
+        <activity android:name=".Cadastro" />
+        <activity android:name=".Login"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class Cadastro extends AppCompatActivity implements Button.OnClickListener {
 
-    EditText nome, email, senha;
+    EditText email, nome, senha;
     Button enviar;
     UsuarioDB db = new UsuarioDB(this);
 
@@ -21,8 +21,8 @@ public class Cadastro extends AppCompatActivity implements Button.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        nome = (EditText) findViewById(R.id.campoNome);
         email = (EditText) findViewById(R.id.campoEmail);
+        nome = (EditText) findViewById(R.id.campoNome);
         senha = (EditText) findViewById(R.id.campoSenha);
         enviar = (Button) findViewById(R.id.botaoEnviar);
 
@@ -31,9 +31,9 @@ public class Cadastro extends AppCompatActivity implements Button.OnClickListene
 
     @Override
     public void onClick(View v) {
-        db.save(new Usuario(
-                nome.getText().toString(),
+        db.add(new Usuario(
                 email.getText().toString(),
+                nome.getText().toString(),
                 senha.getText().toString()) );
         Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
         finish();
