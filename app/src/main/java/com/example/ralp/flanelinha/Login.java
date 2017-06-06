@@ -22,7 +22,7 @@ public class Login extends AppCompatActivity implements Button.OnClickListener{
 
         emailEdit = (EditText) findViewById(R.id.campoEmail);
         senhaEdit = (EditText) findViewById(R.id.campoSenha);
-        entrar = (Button) findViewById(R.id.botaoEnviar);
+        entrar = (Button) findViewById(R.id.botaoEntrar);
 
         entrar.setOnClickListener(this);
     }

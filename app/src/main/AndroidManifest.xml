@@ -45,7 +45,8 @@
         <activity android:name=".Cadastro" />
         <activity android:name=".Login" />
         <activity android:name=".DebugListaUsuarios" />
-        <activity android:name=".DebugListaUsuariosAdapter"></activity>
+        <activity android:name=".DebugListaUsuariosAdapter" />
+        <activity android:name=".AlterarSenha"></activity>
     </application>
 
 </manifest>

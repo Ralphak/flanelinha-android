@@ -67,9 +67,10 @@ public class TelaPrincipal extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Intent i = null;
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Intent i = null;
 
         if(id == R.id.nav_cadastrar){
             if(usuarioLogado)
@@ -82,8 +83,14 @@ public class TelaPrincipal extends AppCompatActivity
                 Toast.makeText(this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
             else
                 i = new Intent(this, Login.class);
-
-        }else if(id == R.id.nav_sair){
+        }
+        else if(id == R.id.nav_alterarSenha){
+            if(!usuarioLogado)
+                Toast.makeText(this, "Nenhum login detectado!", Toast.LENGTH_SHORT).show();
+            else
+                i = new Intent(this, AlterarSenha.class);
+        }
+        else if(id == R.id.nav_sair){
             if(!usuarioLogado)
                 Toast.makeText(this, "Nenhum login detectado!", Toast.LENGTH_SHORT).show();
             else {
@@ -117,5 +124,9 @@ public class TelaPrincipal extends AppCompatActivity
         headerNome.setText("Visitante");
         headerEmail.setText("");
         usuarioLogado = false;
+    }
+    //Retorna o email do usuário logado (usado para alterar sua senha)
+    static String getLoginEmail(){
+        return headerEmail.getText().toString();
     }
 }
