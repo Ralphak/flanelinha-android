@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,9 +21,8 @@ import android.widget.Toast;
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    View header;
-    static TextView headerNome, headerEmail;
-    static private boolean usuarioLogado;
+    static private TextView headerNome, headerEmail;
+    static private Menu navigationMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +31,13 @@ public class TelaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Botão que abre a busca por estacionamentos
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(TelaPrincipal.this, ListaEstacionamentos.class);
+                startActivity(i);
             }
         });
 
@@ -49,9 +50,11 @@ public class TelaPrincipal extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        header = navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
         headerNome = (TextView) header.findViewById(R.id.headerNome);
         headerEmail = (TextView) header.findViewById(R.id.headerEmail);
+
+        navigationMenu = navigationView.getMenu();
     }
 
     @Override
@@ -73,30 +76,21 @@ public class TelaPrincipal extends AppCompatActivity
         int id = item.getItemId();
 
         if(id == R.id.nav_cadastrar){
-            if(usuarioLogado)
-                Toast.makeText(this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
-            else
-                i = new Intent(this, Cadastro.class);
+            i = new Intent(this, Cadastro.class);
         }
         else if(id == R.id.nav_login){
-            if(usuarioLogado)
-                Toast.makeText(this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
-            else
-                i = new Intent(this, Login.class);
+            i = new Intent(this, Login.class);
         }
         else if(id == R.id.nav_alterarSenha){
-            if(!usuarioLogado)
-                Toast.makeText(this, "Nenhum login detectado!", Toast.LENGTH_SHORT).show();
-            else
-                i = new Intent(this, AlterarSenha.class);
+            i = new Intent(this, AlterarSenha.class);
         }
         else if(id == R.id.nav_sair){
-            if(!usuarioLogado)
-                Toast.makeText(this, "Nenhum login detectado!", Toast.LENGTH_SHORT).show();
-            else {
-                Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Desconectado", Toast.LENGTH_SHORT).show();
                 atualizarLogin();
-            }
+        }
+        else if(id == R.id.nav_debug){
+            navigationMenu.findItem(R.id.aba_diagnostico).setVisible(true);
+            navigationMenu.findItem(id).setVisible(false);
         }
         else if(id == R.id.nav_debugListar){
             i = new Intent(this, DebugListaUsuarios.class);
@@ -117,13 +111,23 @@ public class TelaPrincipal extends AppCompatActivity
     static void atualizarLogin(String nome, String email){
         headerNome.setText(nome);
         headerEmail.setText(email);
-        usuarioLogado = true;
+
+        //Altera a visibilidade dos itens do menu
+        navigationMenu.findItem(R.id.nav_cadastrar).setVisible(false);
+        navigationMenu.findItem(R.id.nav_login).setVisible(false);
+        navigationMenu.findItem(R.id.nav_alterarSenha).setVisible(true);
+        navigationMenu.findItem(R.id.nav_sair).setVisible(true);
     }
     //Desconecta o usuário e volta para o visitante
     static void atualizarLogin(){
         headerNome.setText("Visitante");
         headerEmail.setText("");
-        usuarioLogado = false;
+
+        //Altera a visibilidade dos itens do menu
+        navigationMenu.findItem(R.id.nav_cadastrar).setVisible(true);
+        navigationMenu.findItem(R.id.nav_login).setVisible(true);
+        navigationMenu.findItem(R.id.nav_alterarSenha).setVisible(false);
+        navigationMenu.findItem(R.id.nav_sair).setVisible(false);
     }
     //Retorna o email do usuário logado (usado para alterar sua senha)
     static String getLoginEmail(){

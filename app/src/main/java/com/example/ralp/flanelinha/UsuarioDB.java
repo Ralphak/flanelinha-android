@@ -1,3 +1,5 @@
+//Banco de dados de usuários
+
 package com.example.ralp.flanelinha;
 
 import android.content.ContentValues;

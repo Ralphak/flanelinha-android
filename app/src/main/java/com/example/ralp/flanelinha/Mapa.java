@@ -4,7 +4,9 @@ package com.example.ralp.flanelinha;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,8 +25,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.LocationServices;
@@ -38,6 +44,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    static Estacionamento destino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +87,13 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+
+        //Adiciona um marcador no estacionamento escolhido
+        if(destino != null)
+            mMap.addMarker(new MarkerOptions()
+                    .position(destino.getCoordenadas())
+                    .title(destino.getLocal())
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.icone_flanela)));
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -103,12 +117,21 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Sua Posição");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        if(destino != null){
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(latLng);
+            builder.include(destino.getCoordenadas());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(mMap.getCameraPosition().zoom - 0.5f));
+        }
+        else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        }
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -200,5 +223,4 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback,
             //You can add here other case statements according to your requirement.
         }
     }
-
 }

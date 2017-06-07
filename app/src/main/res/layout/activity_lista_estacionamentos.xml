@@ -8,12 +8,8 @@
     tools:context="com.example.ralp.flanelinha.ListaEstacionamentos">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,14 +29,10 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="47dp" />
 
-        <TextView
-            android:id="@+id/tx_bairro"
+        <SearchView
+            android:id="@+id/busca"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFA500"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content" />
 
         <ListView
             android:id="@+id/listaEstacionamentos"

@@ -1,3 +1,6 @@
+//Lista de todos os usuários no banco de dados
+//Para fins de diagnóstico somente
+
 package com.example.ralp.flanelinha;
 
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +24,7 @@ public class DebugListaUsuarios extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listaUsuarios);
         usuarios = db.getAll();
 
-        DebugListaUsuariosAdapter usuarioAdapter = new DebugListaUsuariosAdapter(this, usuarios);
-        listView.setAdapter(usuarioAdapter);
+        DebugListaUsuariosAdapter adapter = new DebugListaUsuariosAdapter(this, usuarios);
+        listView.setAdapter(adapter);
     }
 }

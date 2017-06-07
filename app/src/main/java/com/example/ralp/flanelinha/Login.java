@@ -1,3 +1,5 @@
+//Tela de login
+
 package com.example.ralp.flanelinha;
 
 import android.support.v7.app.AppCompatActivity;

@@ -19,12 +19,11 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListaBairro" />
         <activity android:name=".ListaEstacionamentos" />
+        <activity android:name=".Mapa" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,16 +35,13 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity android:name=".Mapa" />
         <activity
             android:name=".TelaPrincipal"
-            android:label="Flanelinha"
+            android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".Cadastro" />
         <activity android:name=".Login" />
         <activity android:name=".DebugListaUsuarios" />
-        <activity android:name=".DebugListaUsuariosAdapter" />
         <activity android:name=".AlterarSenha"></activity>
     </application>
 

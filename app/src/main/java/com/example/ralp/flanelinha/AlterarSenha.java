@@ -1,3 +1,5 @@
+//Tela de alteração de senha do usuário logado
+
 package com.example.ralp.flanelinha;
 
 import android.support.v7.app.AppCompatActivity;

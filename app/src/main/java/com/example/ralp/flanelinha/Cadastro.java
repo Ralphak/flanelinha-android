@@ -1,3 +1,5 @@
+//Tela de cadastro de novo usuário
+
 package com.example.ralp.flanelinha;
 
 import android.content.Context;
