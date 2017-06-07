@@ -81,6 +81,15 @@ public class TelaPrincipal extends AppCompatActivity
         else if(id == R.id.nav_login){
             i = new Intent(this, Login.class);
         }
+        else if(id == R.id.nav_historico){
+            Toast.makeText(this, "Função ainda não implementada", Toast.LENGTH_SHORT).show();
+        }
+        else if(id == R.id.nav_favoritos){
+            Toast.makeText(this, "Função ainda não implementada", Toast.LENGTH_SHORT).show();
+        }
+        else if(id == R.id.nav_pagamento){
+            Toast.makeText(this, "Função ainda não implementada", Toast.LENGTH_SHORT).show();
+        }
         else if(id == R.id.nav_alterarSenha){
             i = new Intent(this, AlterarSenha.class);
         }
@@ -115,6 +124,9 @@ public class TelaPrincipal extends AppCompatActivity
         //Altera a visibilidade dos itens do menu
         navigationMenu.findItem(R.id.nav_cadastrar).setVisible(false);
         navigationMenu.findItem(R.id.nav_login).setVisible(false);
+        navigationMenu.findItem(R.id.nav_historico).setVisible(true);
+        navigationMenu.findItem(R.id.nav_favoritos).setVisible(true);
+        navigationMenu.findItem(R.id.nav_pagamento).setVisible(true);
         navigationMenu.findItem(R.id.nav_alterarSenha).setVisible(true);
         navigationMenu.findItem(R.id.nav_sair).setVisible(true);
     }
@@ -126,6 +138,9 @@ public class TelaPrincipal extends AppCompatActivity
         //Altera a visibilidade dos itens do menu
         navigationMenu.findItem(R.id.nav_cadastrar).setVisible(true);
         navigationMenu.findItem(R.id.nav_login).setVisible(true);
+        navigationMenu.findItem(R.id.nav_historico).setVisible(false);
+        navigationMenu.findItem(R.id.nav_favoritos).setVisible(false);
+        navigationMenu.findItem(R.id.nav_pagamento).setVisible(false);
         navigationMenu.findItem(R.id.nav_alterarSenha).setVisible(false);
         navigationMenu.findItem(R.id.nav_sair).setVisible(false);
     }
